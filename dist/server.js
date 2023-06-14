@@ -13,13 +13,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
-const main = () => __awaiter(void 0, void 0, void 0, function* () {
+const app_1 = __importDefault(require("./app"));
+const config_1 = __importDefault(require("./config"));
+const port = config_1.default.port || 8000;
+const boostrap = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield mongoose_1.default.connect("mongodb+srv://alamgir:Az6908819789@cluster0.9inlzqr.mongodb.net/university-management");
+        yield mongoose_1.default.connect(config_1.default.database_url);
         console.log(`DB is connected successfully`);
+        app_1.default.listen(port, () => {
+            console.log(`app listening on port ${port}`);
+        });
     }
     catch (e) {
         console.log(e);
     }
 });
-main();
+boostrap();
