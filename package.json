@@ -17,7 +17,7 @@
   "author": "",
   "license": "ISC",
   "lint-staged": {
-    "src/**/*.ts": "yarn lint-prettier"
+    "src/**/*.ts": "yarn lint:check"
   },
   "devDependencies": {
     "@types/cors": "^2.8.13",
