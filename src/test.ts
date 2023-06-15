@@ -1,2 +1,2 @@
-const test = 'hello world'
+const test = 'testing'
 console.log(test)
