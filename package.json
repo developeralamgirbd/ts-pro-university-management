@@ -11,6 +11,7 @@
     "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
     "prettier:fix": "prettier --write .",
     "lint-prettier": "yarn lint:check && yarn format",
+    "husky-enable": "npx husky install",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
