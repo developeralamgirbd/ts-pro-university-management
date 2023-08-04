@@ -3,6 +3,9 @@ import { AcademicSemesterService } from './academisSemester.service';
 import catchAsync from '../../../shared/catchAsync';
 import sendResponse from '../../../shared/sendResponse';
 import { StatusCodes } from 'http-status-codes';
+import pick from '../../../shared/pick';
+import { paginationFieds } from '../../../constants/pagination';
+import { IAcademicSemister } from './academicSemester.interface';
 
 const createAcademicSemester = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -11,7 +14,7 @@ const createAcademicSemester = catchAsync(
       academicSemesterData
     );
 
-    sendResponse(res, {
+    sendResponse<IAcademicSemister>(res, {
       statusCode: StatusCodes.OK,
       success: true,
       message: 'Academis semester created successfully',
@@ -21,4 +24,25 @@ const createAcademicSemester = catchAsync(
   }
 );
 
-export const AcademicSemesterController = { createAcademicSemester };
+const getAllAcademicSemesters = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const paginationOptions = pick(req.query, paginationFieds);
+
+    const result = await AcademicSemesterService.getAllSemesters(
+      paginationOptions
+    );
+    sendResponse<IAcademicSemister[]>(res, {
+      statusCode: StatusCodes.OK,
+      success: true,
+      message: 'Semester retrived successfully !',
+      meta: result.meta,
+      data: result.data,
+    });
+    next();
+  }
+);
+
+export const AcademicSemesterController = {
+  createAcademicSemester,
+  getAllAcademicSemesters,
+};
