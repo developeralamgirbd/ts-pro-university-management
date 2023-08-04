@@ -5,6 +5,7 @@ import { IAcademicSemister } from './academicSemester.interface';
 import AcademicSemister from './academicSemester.model';
 import { IPaginationOptions } from '../../../interfaces/pagination';
 import { IGenericResponse } from '../../../interfaces/common';
+import { paginationHelper } from '../../../helpers/paginationHelper';
 
 const createSemester = async (
   payload: IAcademicSemister
@@ -20,15 +21,23 @@ const createSemester = async (
 const getAllSemesters = async (
   paginationOptions: IPaginationOptions
 ): Promise<IGenericResponse<IAcademicSemister[]>> => {
-  const { page = 1, limit = 10 } = paginationOptions;
-  const skip = (page - 1) * limit;
-  // const result = await AcademicSemister.aggregate([
-  //   { $match: {} },
-  //   { $skip: skip },
-  //   { $limit: Number(limit) },
-  // ]);
+  const { page, limit, skip, sortBy, sortOrder } =
+    paginationHelper.calculatePagination(paginationOptions);
 
-  const result = await AcademicSemister.find().sort().skip(skip).limit(limit);
+  const sortCondition: Record<string, 1 | -1> = {}; // Adjust the type here
+
+  if (sortBy && sortOrder) {
+    sortCondition[sortBy] = sortOrder as 1 | -1; // Make sure to cast sortOrder to 1 | -1
+  }
+
+  const result = await AcademicSemister.aggregate([
+    { $match: {} },
+    { $sort: sortCondition }, // Use the sortCondition variable here
+    { $skip: skip },
+    { $limit: limit },
+  ]);
+
+  // const result = await AcademicSemister.find().sort().skip(skip).limit(limit);
 
   const total = await AcademicSemister.countDocuments();
 
