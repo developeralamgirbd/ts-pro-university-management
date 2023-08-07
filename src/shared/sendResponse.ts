@@ -8,7 +8,7 @@ type IResponse<T> = {
     page: number;
     limit: number;
     total: number;
-  } | null;
+  };
   data: T | null;
 };
 
@@ -17,7 +17,7 @@ const sendResponse = <T>(res: Response, data: IResponse<T>): void => {
     statusCode: data.statusCode,
     success: data.success,
     message: data.message,
-    meta: data.meta || null,
+    meta: data.meta || null || undefined,
     data: data.data || null,
   };
   res.status(data.statusCode).json(responseData);
