@@ -1,6 +1,9 @@
 import { StatusCodes } from 'http-status-codes';
 import ApiError from '../../../errors/ApiError';
-import { academicSemesterTitleCodeMapper } from './academicSemester.constant';
+import {
+  academicSemesterTitleCodeMapper,
+  searchableFields,
+} from './academicSemester.constant';
 import {
   IAcademicSemesterFilter,
   IAcademicSemister,
@@ -25,8 +28,8 @@ const getAllSemesters = async (
   filters: IAcademicSemesterFilter,
   paginationOptions: IPaginationOptions
 ): Promise<IGenericResponse<IAcademicSemister[]>> => {
-  const { search } = filters;
-  const searchableFields = ['title', 'code', 'year'];
+  const { search, ...filtersData } = filters;
+
   const andConditions = [];
 
   if (search) {
@@ -37,13 +40,20 @@ const getAllSemesters = async (
     });
   }
 
+  if (Object.keys(filtersData).length) {
+    andConditions.push({
+      $and: Object.entries(filtersData).map(([field, value]) => ({
+        [field]: value,
+      })),
+    });
+  }
+
   const { page, limit, skip, sortBy, sortOrder } =
     paginationHelper.calculatePagination(paginationOptions);
 
-  const sortCondition: Record<string, 1 | -1> = {}; // Adjust the type here
-
+  const sortCondition: Record<string, 1 | -1> = {};
   if (sortBy && sortOrder) {
-    sortCondition[sortBy] = sortOrder as 1 | -1; // Make sure to cast sortOrder to 1 | -1
+    sortCondition[sortBy] = sortOrder as 1 | -1;
   }
 
   const result = await AcademicSemister.aggregate([

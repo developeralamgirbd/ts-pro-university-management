@@ -6,6 +6,7 @@ import { StatusCodes } from 'http-status-codes';
 import pick from '../../../shared/pick';
 import { paginationFieds } from '../../../constants/pagination';
 import { IAcademicSemister } from './academicSemester.interface';
+import { filterableFields } from './academicSemester.constant';
 
 const createAcademicSemester = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
@@ -26,7 +27,7 @@ const createAcademicSemester = catchAsync(
 
 const getAllAcademicSemesters = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const filters = pick(req.query, ['search']);
+    const filters = pick(req.query, filterableFields);
     const paginationOptions = pick(req.query, paginationFieds);
 
     const result = await AcademicSemesterService.getAllSemesters(
