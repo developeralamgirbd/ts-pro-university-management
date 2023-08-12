@@ -90,6 +90,13 @@ const updateSemester = async (
   id: string,
   payload: Partial<IAcademicSemister>
 ) => {
+  if (
+    payload.title &&
+    payload.code &&
+    academicSemesterTitleCodeMapper[payload.title] !== payload.code
+  ) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, 'Invalid semester code!');
+  }
   return AcademicSemister.findOneAndUpdate({ _id: id }, payload, { new: true });
 };
 

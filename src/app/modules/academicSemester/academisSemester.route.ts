@@ -6,7 +6,7 @@ const router = Router();
 
 router.post(
   '/academicsemesters',
-  validateRequest(AcademicSemisterValidation.academisSemisterZodSchema),
+  validateRequest(AcademicSemisterValidation.createAcademicSemisterZodSchema),
   AcademicSemesterController.createAcademicSemester
 );
 
@@ -21,6 +21,7 @@ router.get(
 );
 router.patch(
   '/academic-semesters/:id',
+  validateRequest(AcademicSemisterValidation.updateAcademicSemisterZodSchema),
   AcademicSemesterController.updateAcademicSemester
 );
 
