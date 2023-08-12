@@ -19,5 +19,9 @@ router.get(
   '/academic-semesters',
   AcademicSemesterController.getAllAcademicSemesters
 );
+router.patch(
+  '/academic-semesters/:id',
+  AcademicSemesterController.updateAcademicSemester
+);
 
 export const AcademicRoutes = router;
