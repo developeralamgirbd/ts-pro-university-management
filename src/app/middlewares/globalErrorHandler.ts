@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-console */
 import { ErrorRequestHandler } from 'express';
@@ -76,7 +77,6 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
     // eslint-disable-next-line no-undefined
     stack: config.env !== 'production' ? err?.stack : undefined,
   });
-  next();
 };
 
 export default globalErrorHandler;

@@ -99,10 +99,16 @@ const updateSemester = async (
   }
   return AcademicSemister.findOneAndUpdate({ _id: id }, payload, { new: true });
 };
+const deleteSemester = async (
+  id: string
+): Promise<IAcademicSemister | null> => {
+  return AcademicSemister.findByIdAndDelete({ _id: id });
+};
 
 export const AcademicSemesterService = {
   createSemester,
   getAllSemesters,
   getSingleSemester,
   updateSemester,
+  deleteSemester,
 };
