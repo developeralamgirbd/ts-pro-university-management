@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { AcademicFacultyService } from './academisSemester.service';
+import { AcademicFacultyService } from './academicFaculty.service';
 import catchAsync from '../../../shared/catchAsync';
 import sendResponse from '../../../shared/sendResponse';
 import { StatusCodes } from 'http-status-codes';
