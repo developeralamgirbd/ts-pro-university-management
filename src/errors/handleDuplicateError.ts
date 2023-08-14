@@ -10,10 +10,13 @@ const handleDuplicateError = (err: mongoose.mongo.MongoServerError) => {
     });
   }
 
-  const statusCode = 400;
+  const statusCode = err.codeName === 'DuplicateKey' ? 400 : 500;
   return {
     statusCode,
-    message: 'Duplicate Key Error',
+    message:
+      err.codeName === 'DuplicateKey'
+        ? 'Duplicate Key Error'
+        : 'Something went wrong!',
     errorMessages: errors,
   };
 };

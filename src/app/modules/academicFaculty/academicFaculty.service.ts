@@ -7,6 +7,7 @@ import AcademicFacultyModel from './academicFaculty.model';
 import { IPaginationOptions } from '../../../interfaces/pagination';
 import { IGenericResponse } from '../../../interfaces/common';
 import { paginationHelper } from '../../../helpers/paginationHelper';
+import { dbQueries } from './dbQueries';
 
 const createFaculty = async (
   payload: IAcademicFaculty
@@ -52,12 +53,16 @@ const getAllFaculties = async (
 
   const result = await AcademicFacultyModel.aggregate([
     { $match: whereConditions },
+    { $project: dbQueries.projection },
     { $sort: sortCondition }, // Use the sortCondition variable here
     { $skip: skip },
     { $limit: limit },
   ]);
 
-  // const result = await AcademicSemister.find().sort().skip(skip).limit(limit);
+  // const result = await AcademicFacultyModel.find(whereConditions)
+  //   .sort(sortCondition)
+  //   .skip(skip)
+  //   .limit(limit);
 
   const total = await AcademicFacultyModel.countDocuments();
 
