@@ -18,7 +18,6 @@ import {ManagementDepartment} from "../managementDepartment/managementDepartment
 import {IAdmin} from "../admin/admin.interface";
 import {Admin} from "../admin/admin.model";
 import {adminDbQueries} from "../admin/admin.dbQueries";
-
 export const findLastStudentId = async (): Promise<string | undefined> => {
   const lastStudent = await User.findOne({ role: 'student' }, { id: 1, _id: 0 })
     .sort({ createdAt: -1 })
