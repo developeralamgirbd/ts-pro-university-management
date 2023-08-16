@@ -1,5 +1,7 @@
 import { Schema, model } from 'mongoose';
 import { IUser, UserModel } from './user.interface';
+import bcrypt from "bcryptjs";
+import config from "../../../config";
 
 const userSchema = new Schema<IUser>(
   {
@@ -31,6 +33,12 @@ const userSchema = new Schema<IUser>(
   },
   { timestamps: true, versionKey: false, toJSON: { virtuals: true } }
 );
+
+userSchema.pre('save', function (next) {
+    const salt = bcrypt.genSaltSync(Number(config.bcrypt_salt));
+    this.password = bcrypt.hashSync(this.password, salt);
+    next()
+})
 
 const User = model<IUser, UserModel>('User', userSchema);
 
