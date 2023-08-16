@@ -13,15 +13,15 @@ import {
 // };
 
 export const generateStudentId = async (
-  academicSemester: IAcademicSemister
+  academicSemester: IAcademicSemister | null
 ): Promise<string> => {
   const currentId =
     (await findLastStudentId()) || (0).toString().padStart(5, '0');
   // increement id by 1
   let increementalId = (parseInt(currentId) + 1).toString().padStart(5, '0');
 
-  increementalId = `${academicSemester.year.substring(2)}${
-    academicSemester.code
+  increementalId = `${academicSemester?.year.substring(2)}${
+    academicSemester?.code
   }${increementalId}`;
 
   return increementalId;
