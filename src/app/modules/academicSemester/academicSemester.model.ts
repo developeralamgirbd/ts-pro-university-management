@@ -57,7 +57,7 @@ academicSemisterSchema.pre('save', async function (next) {
 });
 
 const AcademicSemister = model<IAcademicSemister, AcademicSemisterModel>(
-  'AcademicSemister',
+  'AcademicSemester',
   academicSemisterSchema
 );
 

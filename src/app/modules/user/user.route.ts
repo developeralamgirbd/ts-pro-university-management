@@ -5,9 +5,20 @@ import { validateRequest } from '../../middlewares/validateRequest';
 const router = Router();
 
 router.post(
-  '/users',
-  validateRequest(UserValidation.userZodSchema),
-  UserController.createUser
+  '/students',
+  validateRequest(UserValidation.createStudentZodSchema),
+  UserController.createStudent
+);
+router.post(
+  '/faculties',
+  validateRequest(UserValidation.createFacultyZodSchema),
+  UserController.createFaculty
+);
+
+router.post(
+  '/admins',
+  validateRequest(UserValidation.createAdminZodSchema),
+  UserController.createAdmin
 );
 
 export const UserRoutes = router;
