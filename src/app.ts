@@ -4,7 +4,10 @@ const app: Express = express();
 import globalErrorHandler from './app/middlewares/globalErrorHandler';
 import routes from './app/routes';
 import { StatusCodes } from 'http-status-codes';
+import cookieParser from 'cookie-parser';
+
 app.use(cors());
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

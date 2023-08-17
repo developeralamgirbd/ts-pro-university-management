@@ -42,7 +42,10 @@ const userSchema = new Schema<IUser, IUserMethods>(
 userSchema.methods.isUserExit = async function (
   id: string
 ): Promise<Partial<IUser> | null> {
-  return User.findOne({ id }, { id: 1, password: 1, needsPasswordChange: 1 });
+  return User.findOne(
+    { id },
+    { id: 1, password: 1, needsPasswordChange: 1, role: 1 }
+  );
 };
 
 userSchema.methods.isPasswordMatch = async function (
