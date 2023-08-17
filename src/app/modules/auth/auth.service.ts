@@ -1,8 +1,12 @@
 import User from '../user/user.model';
-import { ILoginUser } from './auth.interface';
+import { ILoginUser, ILoginUserResponse } from './auth.interface';
 import apiError from '../../../errors/ApiError';
 import { StatusCodes } from 'http-status-codes';
-const loginUser = async (payload: ILoginUser) => {
+import { Secret } from 'jsonwebtoken';
+import config from '../../../config';
+import { jwtHelpers } from '../../../helpers/jwtHelpers';
+
+const loginUser = async (payload: ILoginUser): Promise<ILoginUserResponse> => {
   const { id, password } = payload;
 
   const user = new User();
@@ -34,9 +38,21 @@ const loginUser = async (payload: ILoginUser) => {
     );
   }
 
+  const accessToken: string = jwtHelpers.createToken(
+    { id: isUserExit?.id, role: isUserExit?.role },
+    config?.jwt_secret as Secret,
+    config.jwt_expires_in as string
+  );
+  const refreshToken: string = jwtHelpers.createToken(
+    { id: isUserExit?.id, role: isUserExit?.role },
+    config?.jwt_refresh_secret as Secret,
+    config.jwt_refresh_expires_in as string
+  );
+
   return {
-    needsPasswordChange: isUserExit.needsPasswordChange,
-    accessToken: 'access token',
+    accessToken,
+    refreshToken,
+    needsPasswordChange: isUserExit?.needsPasswordChange,
   };
 };
 
