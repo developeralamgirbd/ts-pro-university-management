@@ -5,7 +5,11 @@ import { IUser } from './user.interface';
 import User from './user.model';
 import { ENUM_USER_ROLE } from '../../../enums/user';
 import AcademicSemister from '../academicSemester/academicSemester.model';
-import {generateAdminId, generateFacultyId, generateStudentId} from './user.utils';
+import {
+  generateAdminId,
+  generateFacultyId,
+  generateStudentId,
+} from './user.utils';
 import mongoose from 'mongoose';
 import Student from '../student/student.model';
 import AcademicFaculty from '../academicFaculty/academicFaculty.model';
@@ -14,10 +18,10 @@ import { Faculty } from '../faculty/faculty.model';
 import { IFaculty } from '../faculty/faculty.interface';
 import { studentDBQueries } from '../student/studentDBQueries';
 import { facultyDBQueries } from '../faculty/faculty.dbQueries';
-import {ManagementDepartment} from "../managementDepartment/managementDepartment.model";
-import {IAdmin} from "../admin/admin.interface";
-import {Admin} from "../admin/admin.model";
-import {adminDbQueries} from "../admin/admin.dbQueries";
+import { ManagementDepartment } from '../managementDepartment/managementDepartment.model';
+import { IAdmin } from '../admin/admin.interface';
+import { Admin } from '../admin/admin.model';
+import { adminDbQueries } from '../admin/admin.dbQueries';
 export const findLastStudentId = async (): Promise<string | undefined> => {
   const lastStudent = await User.findOne({ role: 'student' }, { id: 1, _id: 0 })
     .sort({ createdAt: -1 })
@@ -118,7 +122,7 @@ const createStudent = async (
       { $unwind: '$academicDepartment' },
     ]);
   }
-
+  delete newUserData[0].password;
   return newUserData[0];
 };
 
@@ -193,7 +197,7 @@ const createFaculty = async (
       { $unwind: '$academicDepartment' },
     ]);
   }
-
+  delete newUserData[0].password;
   return newUserData[0];
 };
 
@@ -214,7 +218,6 @@ const createAdmin = async (
   if (!managementDepartment) {
     throw new ApiError(400, 'management department not exits!');
   }
-
 
   let newUserData = null;
 
@@ -257,15 +260,15 @@ const createAdmin = async (
       { $lookup: adminDbQueries.adminJoining },
       { $unwind: '$admin' },
       { $lookup: adminDbQueries.managementDepartmentJoining },
-      { $unwind: '$managementDepartment' }
+      { $unwind: '$managementDepartment' },
     ]);
   }
-
+  delete newUserData[0].password;
   return newUserData[0];
 };
 
 export const userService = {
   createStudent,
   createFaculty,
-  createAdmin
+  createAdmin,
 };
