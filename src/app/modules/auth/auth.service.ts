@@ -1,14 +1,16 @@
 import User from '../user/user.model';
 import {
+  IChangePassword,
   ILoginUser,
   ILoginUserResponse,
   IRefreshTokenResponse,
 } from './auth.interface';
 import apiError from '../../../errors/ApiError';
 import { StatusCodes } from 'http-status-codes';
-import { Secret } from 'jsonwebtoken';
+import { JwtPayload, Secret } from 'jsonwebtoken';
 import config from '../../../config';
 import { jwtHelpers } from '../../../helpers/jwtHelpers';
+import ApiError from '../../../errors/ApiError';
 
 const loginUser = async (payload: ILoginUser): Promise<ILoginUserResponse> => {
   const { id, password } = payload;
@@ -94,7 +96,41 @@ const refreshToken = async (
   };
 };
 
+const changePassword = async (
+  user: JwtPayload | null,
+  payload: IChangePassword
+): Promise<void> => {
+  const { oldPassword, newPassword } = payload;
+
+  // // checking is user exist
+  // const isUserExist = await User.isUserExist(user?.userId);
+
+  const userInstant = new User();
+
+  //alternative way
+  const isUserExist = await User.findOne({ id: user?.id }).select('+password');
+
+  if (!isUserExist) {
+    throw new ApiError(StatusCodes.NOT_FOUND, 'User does not exist');
+  }
+
+  // checking old password
+  if (
+    isUserExist.password &&
+    !(await userInstant.isPasswordMatch(oldPassword, isUserExist.password))
+  ) {
+    throw new ApiError(StatusCodes.UNAUTHORIZED, 'Old Password is incorrect');
+  }
+
+  isUserExist.password = newPassword;
+  isUserExist.needsPasswordChange = false;
+
+  // updating using save()
+  isUserExist.save();
+};
+
 export const AuthService = {
   loginUser,
   refreshToken,
+  changePassword,
 };
