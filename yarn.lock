@@ -1619,10 +1619,10 @@ mongodb@5.9.2:
   optionalDependencies:
     "@mongodb-js/saslprep" "^1.1.0"
 
-mongoose@^7.3.4:
-  version "7.8.1"
-  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-7.8.1.tgz#f2e3402ead59a68f863d71a31910070d47ff751a"
-  integrity sha512-c3MY8P1mGUGO+0H8rqxMNmAmhP0xb2EPNItfr7tHAHkh52uB0owH4Gu6q1GTUYj8yoHEDG5MN2V1aBBR6aJPuA==
+mongoose@^7.8.4:
+  version "7.8.4"
+  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-7.8.4.tgz#d6f123bf88ceba528f79d74a1e9fbba3beb20f11"
+  integrity sha512-qqQ7imsb9lyrW1jmYj6/wDiSewRtd/gpOU2Vdy1AMRBT7jrghKnoDMbC3keFUzZ0iyo3ZcYumisPKFnap5R4zQ==
   dependencies:
     bson "^5.5.0"
     kareem "2.5.1"
